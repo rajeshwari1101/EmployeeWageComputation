@@ -8,11 +8,9 @@ namespace EmployeeWageComputation
 {
     internal class EmployeeWage
     {
-        // Constant variables declared here
+        // Constant and Readonly variables declared here
         private const int IS_FULL_TIME = 1;
         private const int IS_PART_TIME = 0;
-        private const int IS_PRESENT = 1;
-        private const int IS_ABSENT = 0;
         private readonly int RATE_PER_HOUR = 20;
         private readonly int WORKING_DAYS_PER_MONTH = 20;
         private readonly int HOURS_PER_MONTH = 100;
@@ -20,69 +18,95 @@ namespace EmployeeWageComputation
         // Attributes of the class declared here
         private int totalDaysWorked;
         private int monthlyWage;
+        private int dailyWage;
         private int totalHoursWorked;
+        private readonly string company;
 
         // Random object declared
-        private static Random random = new Random();
+        private static readonly Random random = new();
 
-        // Default Constructor
-        public EmployeeWage()
+        // Properties
+        public string Company
+        {
+            get { return company; }
+        }
+        public int DailWage
+        {
+            get { return dailyWage; }
+        }
+        public int TotalWage
+        {
+            get { return monthlyWage; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmployeeWage"/> class.
+        /// </summary>
+        /// <param name="company">The company name.</param>
+        public EmployeeWage(string company)
         {
             totalDaysWorked = 0;
             monthlyWage = 0;
             totalHoursWorked = 0;
+            this.company = company;
         }
 
-        // Parametrised Constructor
-        public EmployeeWage(int ratePerHour, int maxWorkingDays, int maxHoursPerMonth)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmployeeWage"/> class.
+        /// </summary>
+        /// <param name="companyName">Name of the company.</param>
+        /// <param name="ratePerHour">The rate per hour.</param>
+        /// <param name="maxWorkingDays">The maximum working days.</param>
+        /// <param name="maxHoursPerMonth">The maximum hours per month.</param>
+        public EmployeeWage(string companyName, int ratePerHour, int maxWorkingDays, int maxHoursPerMonth)
         {
             RATE_PER_HOUR = ratePerHour;
             WORKING_DAYS_PER_MONTH = maxWorkingDays;
             HOURS_PER_MONTH = maxHoursPerMonth;
+            company = companyName;
         }
 
-        // Resets class attributes to default values given in constructor
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
         private void Reset()
         {
             totalDaysWorked = 0;
             monthlyWage = 0;
             totalHoursWorked = 0;
+            dailyWage = 0;
         }
 
-        // Gets attendance of employee using Random
-        private int GetAttendance()
+        /// <summary>
+        /// Gets the attendance using Random.
+        /// </summary>
+        /// <returns>Return 0 for absent, 1 for present.</returns>
+        private static int GetAttendance()
         {
-            int checkAttendance = random.Next(0, 2);
-            if (checkAttendance == IS_PRESENT)
-                return IS_PRESENT;
-            else
-                return IS_ABSENT;
+            return random.Next(0, 2);
         }
 
-        // Calculates Daily Wage
+        /// <summary>
+        /// Gets the daily wage.
+        /// </summary>
+        /// <returns>The Dail wage</returns>
         private int GetDailyWage()
         {
-            int dailyWage = 0;
-            int dailyHours = 0;
             int empCheck = random.Next(0, 2);
-            switch (empCheck)
+            int dailyHours = empCheck switch
             {
-                case IS_FULL_TIME:
-                    dailyHours = 8;
-                    break;
-                case IS_PART_TIME:
-                    dailyHours = 4;
-                    break;
-                default:
-                    dailyHours = 0;
-                    break;
-            }
+                IS_FULL_TIME => 8,
+                IS_PART_TIME => 4,
+                _ => 0,
+            };
             totalHoursWorked += dailyHours;
             dailyWage = dailyHours * RATE_PER_HOUR;
             return dailyWage;
         }
 
-        // Gets monthly wage after checkking attendance for the working days
+        /// <summary>
+        /// Calculates the monthly wage.
+        /// </summary>
         private void CalculateMonthlyWage()
         {
             for (int i = 0; i < WORKING_DAYS_PER_MONTH; i++)
@@ -91,7 +115,12 @@ namespace EmployeeWageComputation
                 monthlyWage += GetDailyWage();
         }
 
-        // Until total hours reaches 100 or total days = 20
+        /// <summary>
+        /// Meets the wage condition.
+        /// Days Worked == WORKING_DAYS_PER_MONTH
+        /// OR
+        /// Hours Worked == HOURS_PER_MONTH
+        /// </summary>
         public void MeetWageCondition()
         {
             while (totalDaysWorked != WORKING_DAYS_PER_MONTH && totalHoursWorked < HOURS_PER_MONTH)
@@ -101,18 +130,27 @@ namespace EmployeeWageComputation
             }
         }
 
-        // Displays the values of the class atributes at the time this method is called
+        /// <summary>
+        /// Displays the details of the respective company's Employee wage.
+        /// </summary>
         public void Display()
         {
             Console.WriteLine("Total Hours worked: " + totalHoursWorked);
             Console.WriteLine("Total Days worked: " + totalDaysWorked);
+            Console.WriteLine("Daily Wage: " + dailyWage);
             Console.WriteLine("Monthly Wage: " + monthlyWage);
         }
 
-        // Overriding the ToString method of Object class
+        /// <summary>
+        /// Converts to string.
+        /// Has been overridden and optimised for this class
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> with Total wage & Daily wage info.
+        /// </returns>
         public override string ToString()
         {
-            return "Total Hours: " + totalHoursWorked + "; Total Days: " + totalDaysWorked + "; Total Wage: " + monthlyWage;
+            return $"Total Wage: {TotalWage}; Daily Wage: {DailWage}";
         }
     }
 }
