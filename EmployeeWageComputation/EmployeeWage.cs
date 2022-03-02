@@ -8,24 +8,35 @@ namespace EmployeeWageComputation
 {
     internal class EmployeeWage
     {
+        // Constant variables declared here
         const int IS_FULL_TIME = 1;
         const int IS_PART_TIME = 0;
         const int IS_PRESENT = 1;
         const int IS_ABSENT = 0;
         const int RATE_PER_HOUR = 20;
+        const int WORKING_DAYS_PER_MONTH = 20;
 
+        // Attributes of the class declared here
+        int totalDaysWorked;
+        int monthlyWage;
 
-        public void GetAttendance()
+        public EmployeeWage()
+        {
+            totalDaysWorked = 0;
+            monthlyWage = 0;
+        }
+
+        private int GetAttendance()
         {
             Random random = new Random();
             int checkAttendance = random.Next(0, 2);
             if (checkAttendance == IS_PRESENT)
-                Console.WriteLine("Is Present");
-            else if (checkAttendance == IS_ABSENT)
-                Console.WriteLine("Is Absent");
+                return IS_PRESENT;
+            else
+                return IS_ABSENT;
         }
 
-        public void GetDailyWage()
+        private int GetDailyWage()
         {
             int dailyWage = 0;
             int dailyHours = 0;
@@ -44,7 +55,18 @@ namespace EmployeeWageComputation
                     break;
             }
             dailyWage = dailyHours * RATE_PER_HOUR;
-            Console.WriteLine("Daily Wage: " + dailyWage);
+            return dailyWage;
+        }
+
+        public void MonthlyWage()
+        {
+            for (int i = 0; i < WORKING_DAYS_PER_MONTH; i++)
+                totalDaysWorked += GetAttendance();
+            for (int j = 0; j < totalDaysWorked; j++)
+            {
+                monthlyWage += GetDailyWage();
+            }
+            Console.WriteLine("Monthly Wage: " + monthlyWage);
         }
     }
 }
