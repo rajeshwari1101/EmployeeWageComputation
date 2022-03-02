@@ -31,10 +31,18 @@ namespace EmployeeWageComputation
             int dailyHours = 0;
             Random random = new Random();
             int empCheck = random.Next(0, 2);
-            if (empCheck == IS_FULL_TIME)
-                dailyHours = 8;
-            else if (empCheck == IS_PART_TIME)
-                dailyHours = 4;
+            switch (empCheck)
+            {
+                case IS_FULL_TIME:
+                    dailyHours = 8;
+                    break;
+                case IS_PART_TIME:
+                    dailyHours = 4;
+                    break;
+                default:
+                    dailyHours = 0;
+                    break;
+            }
             dailyWage = dailyHours * RATE_PER_HOUR;
             Console.WriteLine("Daily Wage: " + dailyWage);
         }
