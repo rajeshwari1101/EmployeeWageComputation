@@ -9,22 +9,23 @@ namespace EmployeeWageComputation
     internal class EmployeeWage
     {
         // Constant variables declared here
-        const int IS_FULL_TIME = 1;
-        const int IS_PART_TIME = 0;
-        const int IS_PRESENT = 1;
-        const int IS_ABSENT = 0;
-        const int RATE_PER_HOUR = 20;
-        const int WORKING_DAYS_PER_MONTH = 20;
+        private const int IS_FULL_TIME = 1;
+        private const int IS_PART_TIME = 0;
+        private const int IS_PRESENT = 1;
+        private const int IS_ABSENT = 0;
+        private readonly int RATE_PER_HOUR = 20;
+        private readonly int WORKING_DAYS_PER_MONTH = 20;
+        private readonly int HOURS_PER_MONTH = 100;
 
         // Attributes of the class declared here
-        int totalDaysWorked;
-        int monthlyWage;
-        int totalHoursWorked;
+        private int totalDaysWorked;
+        private int monthlyWage;
+        private int totalHoursWorked;
 
         // Random object declared
-        static Random random = new Random();
+        private static Random random = new Random();
 
-        // Constructor
+        // Default Constructor
         public EmployeeWage()
         {
             totalDaysWorked = 0;
@@ -32,8 +33,16 @@ namespace EmployeeWageComputation
             totalHoursWorked = 0;
         }
 
+        // Parametrised Constructor
+        public EmployeeWage(int ratePerHour, int maxWorkingDays, int maxHoursPerMonth)
+        {
+            RATE_PER_HOUR = ratePerHour;
+            WORKING_DAYS_PER_MONTH = maxWorkingDays;
+            HOURS_PER_MONTH = maxHoursPerMonth;
+        }
+
         // Resets class attributes to default values given in constructor
-        public void Reset()
+        private void Reset()
         {
             totalDaysWorked = 0;
             monthlyWage = 0;
@@ -74,7 +83,7 @@ namespace EmployeeWageComputation
         }
 
         // Gets monthly wage after checkking attendance for the working days
-        public void MonthlyWage()
+        private void CalculateMonthlyWage()
         {
             for (int i = 0; i < WORKING_DAYS_PER_MONTH; i++)
                 totalDaysWorked += GetAttendance();
@@ -85,10 +94,10 @@ namespace EmployeeWageComputation
         // Until total hours reaches 100 or total days = 20
         public void MeetWageCondition()
         {
-            while (totalDaysWorked != 20 && totalHoursWorked < 100)
+            while (totalDaysWorked != WORKING_DAYS_PER_MONTH && totalHoursWorked < HOURS_PER_MONTH)
             {
                 Reset();
-                MonthlyWage();
+                CalculateMonthlyWage();
             }
         }
 
@@ -98,6 +107,12 @@ namespace EmployeeWageComputation
             Console.WriteLine("Total Hours worked: " + totalHoursWorked);
             Console.WriteLine("Total Days worked: " + totalDaysWorked);
             Console.WriteLine("Monthly Wage: " + monthlyWage);
+        }
+
+        // Overriding the ToString method of Object class
+        public override string ToString()
+        {
+            return "Total Hours: " + totalHoursWorked + "; Total Days: " + totalDaysWorked + "; Total Wage: " + monthlyWage;
         }
     }
 }
