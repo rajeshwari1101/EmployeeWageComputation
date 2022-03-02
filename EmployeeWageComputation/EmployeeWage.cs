@@ -21,6 +21,9 @@ namespace EmployeeWageComputation
         int monthlyWage;
         int totalHoursWorked;
 
+        // Random object declared
+        static Random random = new Random();
+
         // Constructor
         public EmployeeWage()
         {
@@ -40,7 +43,6 @@ namespace EmployeeWageComputation
         // Gets attendance of employee using Random
         private int GetAttendance()
         {
-            Random random = new Random();
             int checkAttendance = random.Next(0, 2);
             if (checkAttendance == IS_PRESENT)
                 return IS_PRESENT;
@@ -53,7 +55,6 @@ namespace EmployeeWageComputation
         {
             int dailyWage = 0;
             int dailyHours = 0;
-            Random random = new Random();
             int empCheck = random.Next(0, 2);
             switch (empCheck)
             {
@@ -78,9 +79,7 @@ namespace EmployeeWageComputation
             for (int i = 0; i < WORKING_DAYS_PER_MONTH; i++)
                 totalDaysWorked += GetAttendance();
             for (int j = 0; j < totalDaysWorked; j++)
-            {
                 monthlyWage += GetDailyWage();
-            }
         }
 
         // Until total hours reaches 100 or total days = 20
