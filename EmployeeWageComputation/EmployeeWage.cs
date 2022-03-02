@@ -19,13 +19,25 @@ namespace EmployeeWageComputation
         // Attributes of the class declared here
         int totalDaysWorked;
         int monthlyWage;
+        int totalHoursWorked;
 
+        // Constructor
         public EmployeeWage()
         {
             totalDaysWorked = 0;
             monthlyWage = 0;
+            totalHoursWorked = 0;
         }
 
+        // Resets class attributes to default values given in constructor
+        public void Reset()
+        {
+            totalDaysWorked = 0;
+            monthlyWage = 0;
+            totalHoursWorked = 0;
+        }
+
+        // Gets attendance of employee using Random
         private int GetAttendance()
         {
             Random random = new Random();
@@ -36,6 +48,7 @@ namespace EmployeeWageComputation
                 return IS_ABSENT;
         }
 
+        // Calculates Daily Wage
         private int GetDailyWage()
         {
             int dailyWage = 0;
@@ -54,10 +67,12 @@ namespace EmployeeWageComputation
                     dailyHours = 0;
                     break;
             }
+            totalHoursWorked += dailyHours;
             dailyWage = dailyHours * RATE_PER_HOUR;
             return dailyWage;
         }
 
+        // Gets monthly wage after checkking attendance for the working days
         public void MonthlyWage()
         {
             for (int i = 0; i < WORKING_DAYS_PER_MONTH; i++)
@@ -66,6 +81,23 @@ namespace EmployeeWageComputation
             {
                 monthlyWage += GetDailyWage();
             }
+        }
+
+        // Until total hours reaches 100 or total days = 20
+        public void MeetWageCondition()
+        {
+            while (totalDaysWorked != 20 && totalHoursWorked < 100)
+            {
+                Reset();
+                MonthlyWage();
+            }
+        }
+
+        // Displays the values of the class atributes at the time this method is called
+        public void Display()
+        {
+            Console.WriteLine("Total Hours worked: " + totalHoursWorked);
+            Console.WriteLine("Total Days worked: " + totalDaysWorked);
             Console.WriteLine("Monthly Wage: " + monthlyWage);
         }
     }
